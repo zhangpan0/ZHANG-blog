@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        select {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <select name="" id="sele1"></select>
+    <select name="" id="sele2"></select>
+</body>
+<script>
+
+    var sele1 = document.getElementById( 'sele1' );
+    var sele2 = document.getElementById( 'sele2' );
+    var data;
+
+    var  xhr = new XMLHttpRequest();
+    xhr.open( 'GET', './data.json' );
+    xhr.onreadystatechange = function () {
+
+        if ( xhr.readyState == 4 && xhr.status == 200 ) {
+
+            data = JSON.parse(xhr.responseText);
+
+
+            // 处理事件与数据绑定
+            for ( var k in data ) {
+                var option = document.createElement( 'option' );
+                option.innerHTML = k; // 传统( 10 年前的技术 )
+                sele1.appendChild( option );
+            }
+
+            
+
+
+            sele2.innerHTML = data[ Object.keys( data )[ 0 ] ].map(function ( v ) {
+                return '<option>' + v.name + '</option>';
+            }).join( '' );
+        }
+    };
+    xhr.send();
+
+
+   
+    sele1.onchange = function () {
+        // 数据改变
+        // console.log( this.value );
+
+        var curr = data[ this.value ];
+
+        // 绑定
+        sele2.innerHTML = curr.map(function ( v ) {
+            return '<option>' + v.name + '</option>';
+        }).join( '' );
+    };
+
+
+
+</script>
+</html>
